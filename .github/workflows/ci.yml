@@ -46,12 +46,13 @@ jobs:
       - name: Terraform Security Scan (Checkov)
         uses: bridgecrewio/checkov-action@master
         with:
+          directory: environments/dev
           framework: terraform
           soft_fail: true
 
       - name: Terraform Plan
-        run: terraform plan
+        run: terraform plan -input=false
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve
+        run: terraform apply -input=false -auto-approve

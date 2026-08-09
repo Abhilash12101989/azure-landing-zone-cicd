@@ -6,6 +6,7 @@ crash.log
 *.tfplan
 *.tfvars
 *.tfvars.json
+!environments/**/*.tfvars
 
 # Keep lock file
 !.terraform.lock.hcl
