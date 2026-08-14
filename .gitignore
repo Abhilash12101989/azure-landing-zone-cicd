@@ -4,9 +4,9 @@
 *.tfstate.*
 crash.log
 *.tfplan
-*.tfvars
-*.tfvars.json
 
+*.tfvars.json
+*.terraform.lock.hcl
 # Keep lock file
 !.terraform.lock.hcl
 
