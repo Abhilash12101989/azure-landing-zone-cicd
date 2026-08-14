@@ -1,6 +1,6 @@
 variable "rg" {
   type = map(object({
-    name = string
+    name     = string
     location = string
   }))
 }
