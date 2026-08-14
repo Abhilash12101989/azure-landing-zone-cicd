@@ -1,6 +1,8 @@
 name: Feature-branch-workflow
 on:
     push:
+        branches:
+            - feature/**
 jobs:
     terraform-ci:
         runs-on: ubuntu-latest
