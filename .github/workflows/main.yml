@@ -1,38 +1,67 @@
 name: Main Branch Workflow
 on:
-    push:
-        branches:
-            - main
-    workflow_dispatch:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 jobs:
-  terraform:
-        runs-on: ubuntu-latest
-        defaults:
-            run:
-                working-directory: environments/dev
-        steps:
-            - name: Checkout Repository
-              uses: actions/checkout@v4
-            - name: Install Terraform
-              uses: hashicorp/setup-terraform@v3
-              with:
-                  terraform_version: 1.14.3
-            - name: Azure Login
-              uses: azure/login@v2
-              with:
-                  creds: ${{ secrets.AZURE_CREDENTIALS }}
+  plan:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: environments/dev
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.14.3
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-            - name: Terraform init
-              run: terraform init
-            - name: Terraform format
-              run: terraform fmt -check
-            - name: Terraform validate
-              run: terraform validate
-            - name: Terraform Plan
-              run: terraform plan -out=tfplan
-            - name: Upload Terraform Plan
-              uses: actions/upload-artifact@v4
-              with:
-                name: terraform Plan
-                path: environments/dev/tfplan  
-        
+      - name: Terraform init
+        run: terraform init
+      - name: Terraform format
+        run: terraform fmt -check
+      - name: Terraform validate
+        run: terraform validate
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+      - name: Upload Terraform Plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform Plan
+          path: environments/dev/tfplan
+  apply:
+    needs: plan
+    runs-on: ubuntu-latest
+    environment: prod
+    defaults:
+      run:
+        working-directory: environments/dev
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Terraform install
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.14.3
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Terraform init
+        run: terraform init 
+      - name: Terraform validate
+        run: terraform validate
+      - name: Download Terraform Plan
+        uses: actions/download-artifact@v4  
+        with:
+          name: terraform Plan
+          path: environments/dev
+      - name: Terraform apply
+        run: terraform apply tfplan    
+
