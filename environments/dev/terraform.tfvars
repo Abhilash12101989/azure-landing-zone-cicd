@@ -1,5 +1,5 @@
 rg = {
-  "rg1" = {
+  "rg2" = {
     name     = "pipeline-rg"
     location = "centralindia"
   }

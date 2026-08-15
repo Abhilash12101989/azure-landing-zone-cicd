@@ -4,3 +4,7 @@ variable "rg" {
     location = string
   }))
 }
+
+variable "common_tags" {
+  type = map(string)
+}
