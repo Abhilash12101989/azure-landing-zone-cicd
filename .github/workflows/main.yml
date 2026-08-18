@@ -30,8 +30,12 @@ jobs:
         run: tflint -f compact
       - name: Terraform format
         run: terraform fmt -check
+      - name: Install Tflint
+        uses: terraform-linters/setup-tflint@v4
       - name: Run Tflint
         run: tflint -f compact
+      - name: Terraform validate
+        run: terraform validate
       - name: Run Checkov
         uses: bridgecrewio/checkov-action@v12
         with:
