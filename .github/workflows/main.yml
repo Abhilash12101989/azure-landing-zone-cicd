@@ -36,7 +36,7 @@ jobs:
           tflint_version: v0.64.0
           cache: true
       - name: Initialize Tflint
-        run: tflint --init 
+        run: tflint --init
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: Run Tflint
@@ -48,6 +48,8 @@ jobs:
           framework: terraform,github_actions
       - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@v3
+        with:
+          fetch-depth: 0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Terraform Plan
@@ -76,12 +78,11 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Terraform init
-        run: terraform init 
+        run: terraform init
       - name: Download Terraform Plan
-        uses: actions/download-artifact@v4  
+        uses: actions/download-artifact@v4
         with:
           name: terraform Plan
           path: environments/dev
       - name: Terraform apply
-        run: terraform apply tfplan    
-
+        run: terraform apply tfplan
