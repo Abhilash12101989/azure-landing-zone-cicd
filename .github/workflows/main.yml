@@ -48,6 +48,8 @@ jobs:
         with:
           directory: .
           framework: terraform,github_actions
+          output_format: sarif
+          output_file_path: checkov-results.sarif
       - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@v3
         env:
