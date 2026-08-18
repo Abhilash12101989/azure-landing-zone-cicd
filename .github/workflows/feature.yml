@@ -39,8 +39,6 @@ jobs:
               run: tflint --init 
               env:
                 GITHUB_TOKEN: ${{ github.token }}
-            - name: Install Tflint
-              uses: terraform-linters/setup-tflint@v4
             - name: Run Tflint
               run: tflint -f compact
             - name: Run Checkov
