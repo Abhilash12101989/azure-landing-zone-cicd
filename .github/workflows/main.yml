@@ -41,6 +41,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
       - name: Run Tflint
         run: tflint -f compact
+      - name: Terraform validate
+        run: terraform validate
       - name: Run Checkov
         uses: bridgecrewio/checkov-action@v12
         with:
