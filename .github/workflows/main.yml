@@ -24,14 +24,21 @@ jobs:
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Install Tflint
-        uses: terraform-linters/setup-tflint@v4
-      - name: Run Tflint
-        run: tflint -f compact
+      - name: Terraform init
+        run: terraform init
       - name: Terraform format
         run: terraform fmt -check
-      - name: Install Tflint
-        uses: terraform-linters/setup-tflint@v4
+      - name: Terraform validate
+        run: terraform validate
+      - name: Set up TFlint
+        uses: terraform-linters/setup-tflint@v6
+        with:
+          tflint_version: v0.64.0
+          cache: true
+      - name: Initialize Tflint
+        run: tflint --init 
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       - name: Run Tflint
         run: tflint -f compact
       - name: Terraform validate
